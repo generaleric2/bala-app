@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button,  ScrollView, StyleSheet, Image } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { addToCart } from '../reducers/cartSlice';
+import { View, Text, TouchableOpacity,  ScrollView, StyleSheet, Image } from 'react-native';
+import { useDispatch} from 'react-redux';
+import Nav from '../navbar/Navbar'
 import axios from 'axios';
-
+import { addToCart } from '../reducers/cartSlice';
 
 const styles = StyleSheet.create({
     container: {
@@ -19,15 +19,28 @@ const styles = StyleSheet.create({
       marginBottom: 20,
     },
     productImage: {
-      width: 200,
-      height: 200,
+      width: 350,
+      height: 350,
+    },
+    addToCartButton: {
+      backgroundColor: '#0b8a6d', 
+      borderRadius: 40, 
+      padding: 20,
+    },
+    addToCartButtonText: {
+      color: 'white',
+      fontWeight: 'bold',
+      textAlign: 'center',
     },
     productName: {
-      fontSize: 16,
+      fontSize: 20,
       fontWeight: 'bold',
+      marginTop: 20,
+      textAlign: 'center'
     },
     productPrice: {
-      fontSize: 16,
+      fontSize: 20,
+      textAlign: 'center'
     },
   });
 
@@ -48,6 +61,7 @@ const Shop = () => {
     fetchData();
   }, []);
 
+
   const handleAddToCart = (product) => {
     const itemToAdd = {
       productId: product._id,
@@ -62,8 +76,9 @@ const Shop = () => {
 
   return (
     <ScrollView scrollEnabled={true}>
+      <Nav/>
     <View style={styles.container}>
-      <Text style={styles.title}>Your Home Of Premium Sneakers</Text>
+      <Text style={styles.title}>Your Home Of Premium Shoes</Text>
       {data.map((product) => (
         <View key={product._id} style={styles.product}>
           <Image
@@ -72,10 +87,12 @@ const Shop = () => {
           />
           <Text style={styles.productName}>{product.productname}</Text>
           <Text style={styles.productPrice}>UGX{product.price}</Text>
-          <Button
-            title="Add to Cart"
-            onPress={() => handleAddToCart(product)}
-          />
+          <TouchableOpacity
+            style={styles.addToCartButton}
+            onPress={handleAddToCart}
+            >
+            <Text style={styles.addToCartButtonText}>Add to Cart</Text>
+            </TouchableOpacity>
         </View>
       ))}
     </View>
