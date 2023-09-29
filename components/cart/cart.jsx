@@ -5,11 +5,11 @@ import { removeFromCart, updateQuantity, clearCart } from '../reducers/cartSlice
 import { ActivityIndicator } from 'react-native';
 import axios from 'axios'
 
-const Cart = () => {
+
+const Cart = () =>{
   const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
-
 
   const [username, setUsername] = useState('');
   const [phonenumber, setPhonenumber] = useState('');
@@ -25,23 +25,25 @@ const Cart = () => {
 
   const handleCheckout = () => {
     setIsLoading(true);
-  
+
     const productName = cart.items.map((item) => item.productname).join(', ');
+    const size = cart.items.map((item) => item.size).join(', ');
     const totalPrice = cart.items.reduce((acc, item) => acc + item.price * item.quantity, 0);
     const quantity = cart.items.reduce((acc, item) => acc + item.quantity, 0);
-  
+
     axios
       .post('https://bala-canvas.onrender.com/checkout', {
         productName,
         totalPrice,
         quantity,
+        size,
         username,
         phonenumber,
         address,
       })
       .then((response) => {
         setIsLoading(false);
-  
+
         if (response.status === 200) {
           alert('Your order has been received successfully!');
           dispatch(clearCart());
@@ -60,13 +62,14 @@ const Cart = () => {
       <Text style={styles.title}>Shopping Cart</Text>
       {cart.items.map((item) => (
         <View key={item.productId} style={styles.cartItem}>
-                    <Image
+          <Image
             source={{ uri: `https://bala-canvas.onrender.com/${item.productimage}` }}
             style={styles.image}
           />
           <Text>{item.productname}</Text>
           <Text>Price: UGX {item.price}</Text>
           <Text>Quantity: {item.quantity}</Text>
+          <Text>Size: {item.size}</Text>
           <Button
             title="Remove from Cart"
             onPress={() => handleRemoveItem(item.productId)}
@@ -86,7 +89,7 @@ const Cart = () => {
         </Text>
         <Text>Shipping: UGX 10,000</Text>
         <Text style={styles.totalPriceText}>
-        Total: UGX {cart.total + 10000}
+          Total: UGX {cart.total + 10000}
         </Text>
         <TextInput
           style={styles.input}
@@ -107,10 +110,10 @@ const Cart = () => {
           onChangeText={(text) => setAddress(text)}
         />
         {isLoading ? (
-  <ActivityIndicator size="large" color="blue" style={styles.loader} />
-) : (
-  <Button title="Order Now" onPress={handleCheckout} />
-)}
+          <ActivityIndicator size="large" color="blue" style={styles.loader} />
+        ) : (
+          <Button title="Order Now" onPress={handleCheckout} />
+        )}
       </View>
     </ScrollView>
   );

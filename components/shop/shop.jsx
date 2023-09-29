@@ -69,6 +69,7 @@ const Shop = () => {
       price: product.price,
       productimage: product.productimage,
       productname: product.productname,
+      size: product.size
     };
 
     dispatch(addToCart(itemToAdd));
@@ -87,6 +88,7 @@ const Shop = () => {
           />
           <Text style={styles.productName}>{product.productname}</Text>
           <Text style={styles.productPrice}>UGX{product.price}</Text>
+          <Text style={styles.productPrice}>{product.size}</Text>
           <TouchableOpacity
             style={styles.addToCartButton}
             onPress={handleAddToCart}
