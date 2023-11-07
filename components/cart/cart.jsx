@@ -23,11 +23,10 @@ const Cart = () =>{
     dispatch(removeFromCart(productId));
   };
 
-  const handleCheckout = () => {
+  const handleCheckout = (cart, username, phonenumber, address) => {
     setIsLoading(true);
 
     const productName = cart.items.map((item) => item.productname).join(', ');
-    const size = cart.items.map((item) => item.size).join(', ');
     const totalPrice = cart.items.reduce((acc, item) => acc + item.price * item.quantity, 0);
     const quantity = cart.items.reduce((acc, item) => acc + item.quantity, 0);
 
@@ -36,7 +35,6 @@ const Cart = () =>{
         productName,
         totalPrice,
         quantity,
-        size,
         username,
         phonenumber,
         address,
@@ -158,4 +156,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Cart;
+  export default Cart;

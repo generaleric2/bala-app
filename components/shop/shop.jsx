@@ -36,11 +36,9 @@ const styles = StyleSheet.create({
       fontSize: 20,
       fontWeight: 'bold',
       marginTop: 20,
-      textAlign: 'center'
     },
     productPrice: {
       fontSize: 20,
-      textAlign: 'center'
     },
   });
 
@@ -69,7 +67,6 @@ const Shop = () => {
       price: product.price,
       productimage: product.productimage,
       productname: product.productname,
-      size: product.size
     };
 
     dispatch(addToCart(itemToAdd));
@@ -87,11 +84,11 @@ const Shop = () => {
             style={styles.productImage}
           />
           <Text style={styles.productName}>{product.productname}</Text>
-          <Text style={styles.productPrice}>UGX{product.price}</Text>
-          <Text style={styles.productPrice}>{product.size}</Text>
+          <Text style={styles.productPrice}>UGX:{product.price}</Text>
+          <Text style={styles.productPrice}>Sizes:{product.size}</Text>
           <TouchableOpacity
             style={styles.addToCartButton}
-            onPress={handleAddToCart}
+            onPress={() => handleAddToCart(product)}
             >
             <Text style={styles.addToCartButtonText}>Add to Cart</Text>
             </TouchableOpacity>
