@@ -1,103 +1,91 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity,  ScrollView, StyleSheet, Image } from 'react-native';
-import { useDispatch} from 'react-redux';
-import Nav from '../navbar/Navbar'
+import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import axios from 'axios';
-import { addToCart } from '../reducers/cartSlice';
+import { useNavigation } from '@react-navigation/native';
+import Nav from "../navbar/Navbar";
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    title: {
-      fontSize: 20,
-      fontWeight: 'bold',
-    },
-    product: {
-      marginBottom: 20,
-    },
-    productImage: {
-      width: 350,
-      height: 350,
-    },
-    addToCartButton: {
-      backgroundColor: '#0b8a6d', 
-      borderRadius: 40, 
-      padding: 20,
-    },
-    addToCartButtonText: {
-      color: 'white',
-      fontWeight: 'bold',
-      textAlign: 'center',
-    },
-    productName: {
-      fontSize: 20,
-      fontWeight: 'bold',
-      marginTop: 20,
-    },
-    productPrice: {
-      fontSize: 20,
-    },
-  });
+  container: {
+    flex: 1,
+    padding: 16,
+  },
+  productContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  product: {
+    flex: 0.48,
+    borderWidth: 1,
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
+  productImage: {
+    width: '100%',
+    height: 200,
+    resizeMode: 'cover',
+  },
+  productName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    padding: 8,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 40,
+  },
+  productPrice: {
+    fontSize: 14,
+    padding: 8,
+  },
+});
 
 const Shop = () => {
-  const dispatch = useDispatch();
+  const navigation = useNavigation();
   const [data, setData] = useState([]);
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get('https://bala-canvas.onrender.com/shop');
-      setData(response.data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('https://bala-canvas.onrender.com/shop');
+        setData(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
     fetchData();
   }, []);
 
-
-  const handleAddToCart = (product) => {
-    const itemToAdd = {
-      productId: product._id,
-      quantity: 1,
-      price: product.price,
-      productimage: product.productimage,
-      productname: product.productname,
-    };
-
-    dispatch(addToCart(itemToAdd));
+  const handleProductPress = (productId) => {
+    navigation.navigate('ProductDetails', { productId: productId });
   };
 
+  const renderProductItem = ({ item }) => (
+    <TouchableOpacity style={styles.product} onPress={() => handleProductPress(item._id)}>
+      <Image source={{ uri: `https://bala-canvas.onrender.com/${item.productimage}` }} style={styles.productImage} />
+      <Text style={styles.productName}>{item.productname}</Text>
+      <Text style={styles.productPrice}>UGX: {item.price}</Text>
+    </TouchableOpacity>
+  );
+
   return (
-    <ScrollView scrollEnabled={true}>
-      <Nav/>
+    <>
+    <Nav />
     <View style={styles.container}>
-      <Text style={styles.title}>Your Home Of Premium Shoes</Text>
-      {data.map((product) => (
-        <View key={product._id} style={styles.product}>
-          <Image
-            source={{ uri: `https://bala-canvas.onrender.com/${product.productimage}` }}
-            style={styles.productImage}
-          />
-          <Text style={styles.productName}>{product.productname}</Text>
-          <Text style={styles.productPrice}>UGX:{product.price}</Text>
-          <Text style={styles.productPrice}>Sizes:{product.size}</Text>
-          <TouchableOpacity
-            style={styles.addToCartButton}
-            onPress={() => handleAddToCart(product)}
-            >
-            <Text style={styles.addToCartButtonText}>Add to Cart</Text>
-            </TouchableOpacity>
-        </View>
-      ))}
+    <Text style={styles.title}>Your Home Of Premium Shoes</Text>
+      <FlatList
+        data={data}
+        renderItem={renderProductItem}
+        keyExtractor={(item) => item._id}
+        numColumns={2} // Display 2 items per row
+        contentContainerStyle={{ paddingBottom: 16 }}
+      />
     </View>
-    </ScrollView>
+    </>
   );
 };
-
 
 export default Shop;

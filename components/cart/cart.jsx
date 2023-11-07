@@ -3,14 +3,12 @@ import { View, Text, Button, TextInput, StyleSheet, ScrollView, Image } from 're
 import { useDispatch, useSelector } from 'react-redux';
 import { removeFromCart, updateQuantity, clearCart } from '../reducers/cartSlice';
 import { ActivityIndicator } from 'react-native';
-import axios from 'axios'
+import axios from 'axios';
 
-
-const Cart = () =>{
+const Cart = () => {
   const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
-
   const [username, setUsername] = useState('');
   const [phonenumber, setPhonenumber] = useState('');
   const [address, setAddress] = useState('');
@@ -26,9 +24,11 @@ const Cart = () =>{
   const handleCheckout = (cart, username, phonenumber, address) => {
     setIsLoading(true);
 
-    const productName = cart.items.map((item) => item.productname).join(', ');
-    const totalPrice = cart.items.reduce((acc, item) => acc + item.price * item.quantity, 0);
-    const quantity = cart.items.reduce((acc, item) => acc + item.quantity, 0);
+    const productName = cart.items ? cart.items.map((item) => item.productname).join(', ') : '';
+    const totalPrice = cart.items
+      ? cart.items.reduce((acc, item) => acc + item.price * item.quantity, 0)
+      : 0;
+    const quantity = cart.items ? cart.items.reduce((acc, item) => acc + item.quantity, 0) : 0;
 
     axios
       .post('https://bala-canvas.onrender.com/checkout', {
@@ -58,37 +58,37 @@ const Cart = () =>{
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Shopping Cart</Text>
-      {cart.items.map((item) => (
-        <View key={item.productId} style={styles.cartItem}>
-          <Image
-            source={{ uri: `https://bala-canvas.onrender.com/${item.productimage}` }}
-            style={styles.image}
-          />
-          <Text>{item.productname}</Text>
-          <Text>Price: UGX {item.price}</Text>
-          <Text>Quantity: {item.quantity}</Text>
-          <Text>Size: {item.size}</Text>
-          <Button
-            title="Remove from Cart"
-            onPress={() => handleRemoveItem(item.productId)}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Quantity"
-            keyboardType="numeric"
-            value={item.quantity.toString()}
-            onChangeText={(text) => handleQuantity(item.productId, text)}
-          />
-        </View>
-      ))}
+      {cart.items && cart.items.length > 0 ? (
+        cart.items.map((item) => (
+          <View key={item.productId} style={styles.cartItem}>
+            <Image
+              source={{ uri: `https://bala-canvas.onrender.com/${item.productimage}` }}
+              style={styles.image}
+            />
+            <Text>{item.productname}</Text>
+            <Text>Price: UGX {item.price}</Text>
+            <Text>Quantity: {item.quantity}</Text>
+            <Text>Size: {item.size}</Text>
+            <Button
+              title="Remove from Cart"
+              onPress={() => handleRemoveItem(item.productId)}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Quantity"
+              keyboardType="numeric"
+              value={item.quantity.toString()}
+              onChangeText={(text) => handleQuantity(item.productId, text)}
+            />
+          </View>
+        ))
+      ) : (
+        <Text>No items in the cart</Text>
+      )}
       <View style={styles.totalPriceContainer}>
-        <Text style={styles.totalPriceText}>
-          Sub Total: UGX {cart.total}
-        </Text>
+        <Text style={styles.totalPriceText}>Sub Total: UGX {cart.total}</Text>
         <Text>Shipping: UGX 10,000</Text>
-        <Text style={styles.totalPriceText}>
-          Total: UGX {cart.total + 10000}
-        </Text>
+        <Text style={styles.totalPriceText}>Total: UGX {cart.total + 10000}</Text>
         <TextInput
           style={styles.input}
           placeholder="Username"
@@ -110,12 +110,12 @@ const Cart = () =>{
         {isLoading ? (
           <ActivityIndicator size="large" color="blue" style={styles.loader} />
         ) : (
-          <Button title="Order Now" onPress={handleCheckout} />
+          <Button title="Order Now" onPress={() => handleCheckout(cart, username, phonenumber, address)} />
         )}
       </View>
     </ScrollView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
