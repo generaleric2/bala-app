@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   product: {
     flex: 0.48,
     borderWidth: 1,
-    borderRadius: 8,
+    borderRadius: 2,
     overflow: 'hidden',
   },
   productImage: {

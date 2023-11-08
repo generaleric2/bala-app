@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     marginTop: -150,
   },
   productPrice: {
-    fontSize: 18,
+    fontSize: 16,
     marginLeft: 190,
     marginBottom: 8,
     color: '#000000',
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 100,
     marginBottom: 200,
     marginTop: 40,
-    marginLeft: -60,
+    marginLeft: -40,
   },
   addToCartButtonText: {
     color: 'white',

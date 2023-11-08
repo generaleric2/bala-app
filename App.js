@@ -4,7 +4,8 @@ import { store } from './components/store/store';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Shop from './components/shop/shop'; 
-import Cart from './components/cart/cart'; 
+import Cart from './components/cart/cart';
+import Momo from './MicroComponents/Payments/momo' 
 import ProductDetails from './components/Details/productDetails';
 
 
@@ -18,6 +19,7 @@ const App = () => {
           <Stack.Screen name="Shop" component={Shop} />
           <Stack.Screen name="ProductDetails" component={ProductDetails} />
           <Stack.Screen name="Cart" component={Cart} />
+          <Stack.Screen name="Momo" component={Momo} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
