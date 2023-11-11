@@ -89,7 +89,7 @@ const Cart = () => {
       )}
 <TouchableOpacity
   style={styles.addToCartButton}
-  onPress={() => navigation.navigate('Momo', { totalAmount: cart.total + 10000, cartItems: cart.items })}
+  // onPress={() => navigation.navigate('Momo', { totalAmount: cart.total + 10000, cartItems: cart.items })}
 >
   <Text style={styles.addToCartButtonText}>Pay With MOMO</Text>
 </TouchableOpacity>
