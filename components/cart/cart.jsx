@@ -33,7 +33,7 @@ const Cart = () => {
     const quantity = cart.items ? cart.items.reduce((acc, item) => acc + item.quantity, 0) : 0;
 
     axios
-      .post('https://bala-canvas.onrender.com/checkout', {
+      .post(process.env.EXPO_PUBLIC_CART_API_URL, {
         productName,
         totalPrice,
         quantity,

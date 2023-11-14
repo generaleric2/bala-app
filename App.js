@@ -3,11 +3,13 @@ import { Provider } from 'react-redux';
 import { store } from './components/store/store'; 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { activateDevMenu } from 'expo-dev-client';
 import Shop from './components/shop/shop'; 
 import Cart from './components/cart/cart';
 import Momo from './MicroComponents/Payments/momo' 
 import ProductDetails from './components/Details/productDetails';
 
+activateDevMenu;
 
 const Stack = createStackNavigator();
 

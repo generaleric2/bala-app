@@ -49,7 +49,7 @@ const Shop = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://bala-canvas.onrender.com/shop');
+        const response = await axios.get(process.env.EXPO_PUBLIC_SHOP_API_URL);
         setData(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
