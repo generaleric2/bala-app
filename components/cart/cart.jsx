@@ -91,7 +91,7 @@ const Cart = () => {
   style={styles.addToCartButton}
   // onPress={() => navigation.navigate('Momo', { totalAmount: cart.total + 10000, cartItems: cart.items })}
 >
-  <Text style={styles.addToCartButtonText}>Pay With MOMO</Text>
+  <Text style={styles.addToCartButtonText}>PAY WITH MOMO</Text>
 </TouchableOpacity>
       <View style={styles.totalPriceContainer}>
         <Text style={styles.totalPriceText}>Sub Total: UGX {cart.total}</Text>

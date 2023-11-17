@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
     flex: 0.48,
     borderWidth: 1,
     borderRadius: 2,
+    borderColor: 'white',
     overflow: 'hidden',
   },
   productImage: {

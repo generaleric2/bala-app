@@ -1,20 +1,20 @@
 import React from 'react';
-import { Provider } from 'react-redux';
-import { store } from './components/store/store'; 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { activateDevMenu } from 'expo-dev-client';
+import 'react-native-gesture-handler';
+import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
+import { Provider } from 'react-redux';
+import {store} from './components/store/store';
+
 import Shop from './components/shop/shop'; 
 import Cart from './components/cart/cart';
 import Momo from './MicroComponents/Payments/momo' 
 import ProductDetails from './components/Details/productDetails';
 
-activateDevMenu;
-
 const Stack = createStackNavigator();
 
 const App = () => {
-  return (
+ return (
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
@@ -25,7 +25,9 @@ const App = () => {
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
-  );
+ );
 }
 
-export default App;
+const GestureHandlerRootViewGestureHandlerRootView = gestureHandlerRootHOC(App);
+
+export default GestureHandlerRootViewGestureHandlerRootView;

@@ -13,11 +13,15 @@
       }
     },
     "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+        "env": {
+          "EXPO_PUBLIC_SHOP_API_URL": "https://bala-canvas.onrender.com/shop",
+          "EXPO_PUBLIC_CART_API_URL": "https://bala-canvas.onrender.com/checkout"
+        }
     },
     "production": {}
   },
   "submit": {
     "production": {}
   }
-}
+ }
