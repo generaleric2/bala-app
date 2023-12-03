@@ -74,7 +74,7 @@ const Shop = () => {
 
   return (
     <>
-    <Nav />
+   <Nav /> 
     <View style={styles.container}>
     <Text style={styles.title}>Your Home Of Premium Shoes</Text>
       <FlatList

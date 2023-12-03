@@ -2,16 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 
-const momoHost = "sandbox.momodeveloper.mtn.com"
-const momoTokenUrl = `https://${momoHost}/collection/token/`
-const momoRequestToPayUrl = `https://${momoHost}/collection/v1_0/requesttopay`
+const momoTokenUrl = `https://sandbox.momodeveloper.mtn.com/collection/token/`
+const momoRequestToPayUrl = `https://sandbox.momodeveloper.mtn.com/collection/v1_0/requesttopay`
 
 const Momo = ({ route }) => {
   const { totalAmount: initialTotalAmount, cartItems } = route.params;
   const [total, setTotal] = useState(initialTotalAmount);
-  const [totalAmount, setTotalAmount] = useState(initialTotalAmount);  
+  const [totalAmount,] = useState(initialTotalAmount);  
   const [phone, setPhone] = useState('');
-  const [momoResponse, setMomoResponse] = useState(null);
+  const [ momoResponse, setMomoResponse] = useState(null);
   const [momoToken, setMomoToken] = useState(null);
 
   const getMomoToken = async () => {
@@ -20,7 +19,7 @@ const Momo = ({ route }) => {
       url: momoTokenUrl,
       headers: {
         'Content-Type': 'application/json',
-        'Ocp-Apim-Subscription-Key': '5b158c87ce9b495fb64dcac1852d745b',
+        'Ocp-Apim-Subscription-Key': '8de9863ee411404ba1a78795731156f8',
       },
     });
     console.log(token)
@@ -30,15 +29,6 @@ const Momo = ({ route }) => {
   useEffect(() => {
     getMomoToken();
   }, []);
-
-  useEffect(() => {
-    let totalAmount = 0;
-    cartItems.forEach(item => {
-      totalAmount += item.price;
-    });
-    totalAmount += totalAmount * 0.1;
-    setTotal(totalAmount); // Update the total using setTotal function
-  }, [cartItems]);
 
   const requestToPay = async () => {
     if (!momoToken) {
@@ -53,7 +43,7 @@ const Momo = ({ route }) => {
     const body = {
       amount: total,
       currency: 'EUR',
-      externalId: 'c8f060db-5126-47a7-a67b-2fee08c0f30d',
+      externalId: '003455',
       payer: {
         partyIdType: 'MSISDN',
         partyId: phone, // 46733123454
@@ -68,11 +58,9 @@ const Momo = ({ route }) => {
         url: momoRequestToPayUrl,
         headers: {
           'Content-Type': 'application/json',
-          'Ocp-Apim-Subscription-Key': '5b158c87ce9b495fb64dcac1852d745b',
-          'X-Reference-Id': '123456789',
+          'Ocp-Apim-Subscription-Key': '8de9863ee411404ba1a78795731156f8',
+          'X-Reference-Id': 'e236a349-6b3f-4786-9b44-04a5255768f2',
           'X-Target-Environment': 'sandbox',
-          'X-Callback-Url': 'http://localhost:3000/callback',
-          'X-Callback-Host': 'http://localhost:3000',
           Authorization: `Bearer ${momoToken}`,
         },
         data: body,
@@ -82,6 +70,16 @@ const Momo = ({ route }) => {
       console.error('Error processing momo payment:', error);
     }
   };
+
+  useEffect(() => {
+    let totalAmount = 0;
+    cartItems.forEach(item => {
+      totalAmount += item.price;
+    });
+    totalAmount += totalAmount * 0.1;
+    setTotal(totalAmount); // Update the total using setTotal function
+  }, [cartItems]);
+
 
 
   return (

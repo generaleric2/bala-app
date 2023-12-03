@@ -23,8 +23,11 @@ const Nav = () => {
                 <Text style={styles.badgeText}>{totalQuantity}</Text>
               </View>
             )}
-            <Ionicons name="ios-cart" size={32} color="black" />
+            <Ionicons style={styles.cart} name="ios-cart-outline" size={28} color="black" />
           </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Account')}>
+        <Ionicons name="person-outline" size={28} color="black" />
         </TouchableOpacity>
       </View>
     </View>
@@ -46,6 +49,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  cart:{
+    marginRight: 20,
+  },
   iconContainer: {
     position: 'relative',
   },
@@ -62,7 +68,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     position: 'absolute',
     top: -6,
-    right: -12,
+    right: 3,
   },
   badgeText: {
     color: 'white',

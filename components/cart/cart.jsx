@@ -3,11 +3,13 @@ import { View, Text, Button, TextInput, StyleSheet, ScrollView, TouchableOpacity
 import { useDispatch, useSelector } from 'react-redux';
 import { removeFromCart, updateQuantity, clearCart } from '../reducers/cartSlice';
 import { ActivityIndicator } from 'react-native';
+import { Snackbar } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 
 const Cart = () => {
   const cart = useSelector((state) => state.cart);
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
@@ -45,7 +47,7 @@ const Cart = () => {
         setIsLoading(false);
 
         if (response.status === 200) {
-          alert('Your order has been received successfully!');
+          setSnackbarVisible(true);
           dispatch(clearCart());
         } else {
           console.log(response);
@@ -121,6 +123,18 @@ const Cart = () => {
           <Button title="Order Now" onPress={() => handleCheckout(cart, username, phonenumber, address)} />
         )}
       </View>
+      <Snackbar
+        visible={snackbarVisible}
+        onDismiss={() => setSnackbarVisible(false)}
+        action={{
+          label: 'OK',
+          onPress: () => {
+            setSnackbarVisible(false);
+          },
+        }}
+      >
+        Order Received Successfully!
+      </Snackbar>
     </ScrollView>
   );
 }
@@ -148,7 +162,7 @@ const styles = StyleSheet.create({
   addToCartButton: {
     backgroundColor: 'gray',
     borderRadius: 10,
-    paddingVertical: 30,
+    paddingVertical: 20,
     paddingHorizontal: 100,
     marginTop: 40,
     marginLeft: 10,
