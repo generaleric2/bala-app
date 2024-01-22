@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 import { Snackbar } from 'react-native-paper';
-import Nav from "../navbar/Navbar";
+import { useSelector } from 'react-redux';
+import { Ionicons } from '@expo/vector-icons';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../reducers/cartSlice';
 import { ActivityIndicator } from 'react-native'
+import { useNavigation } from '@react-navigation/native';
 
 
 const styles = StyleSheet.create({
@@ -60,12 +62,51 @@ const styles = StyleSheet.create({
   marginRight: 150,
   marginLeft: 150,
 },
+links: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  marginLeft: 40,
+},
+cart:{
+  marginRight: 10,
+},
+iconContainer: {
+  position: 'relative',
+  marginTop: 40,
+  marginLeft: 20,
+},
+badge: {
+  backgroundColor: 'red',
+  borderRadius: 12,
+  width: 24,
+  height: 24,
+  justifyContent: 'center',
+  alignItems: 'center',
+  position: 'absolute',
+  top: -6,
+  right: -4,
+},
+badgeText: {
+  color: 'white',
+  fontWeight: 'bold',
+  fontSize: 14,
+},
+icon:{
+  marginLeft: 20,
+  marginTop: 40,
+},
+doorContainer:{
+  marginLeft: 60,
+  marginTop: -30,
+},
+door:{
+  fontWeight: 'bold',
+},
   addToCartButton: {
     backgroundColor: '#008080',
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 100,
-    marginBottom: 200,
     marginTop: 40,
     marginLeft: -40,
   },
@@ -81,7 +122,10 @@ const ProductDetails = ({ route }) => {
   const { productId } = route.params;
   const dispatch = useDispatch();
   const [product, setProduct] = useState(null);
+  const navigation = useNavigation();
 const [isLoading, setIsLoading] = useState(true);
+const cart = useSelector((state) => state.cart);
+const totalQuantity = cart.items.reduce((acc, item) => acc + item.quantity, 0);
 
 
   useEffect(() => {
@@ -121,8 +165,7 @@ const [isLoading, setIsLoading] = useState(true);
   }
 
   return (
-    <>
-      <Nav />
+    < ScrollView>
       <View style={styles.container}>
         {product ? (
           <>
@@ -145,13 +188,46 @@ const [isLoading, setIsLoading] = useState(true);
                 </TouchableOpacity>
               ))}
             </View>
+            <View style={styles.links}>
             <TouchableOpacity style={styles.addToCartButton} onPress={() => handleAddToCart(product)}>
               <Text style={styles.addToCartButtonText}>Add to Cart</Text>
-            </TouchableOpacity>
+            </TouchableOpacity>        
+        <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
+          <View style={styles.iconContainer}>
+            {totalQuantity > 0 && (
+              <View style={styles.badge}>
+                <Text style={styles.badgeText}>{totalQuantity}</Text>
+              </View>
+            )}
+            <Ionicons style={styles.cart} name="ios-cart" size={38} color="#008080" />
+          </View>
+        </TouchableOpacity>
+      </View>
           </>
         ) : (
           <ActivityIndicator size="large" color="#0000ff" />
         )}
+      </View>
+      <View>
+      <Ionicons style={styles.icon} name="bicycle-outline"  size={30}></Ionicons>
+      <View style={styles.doorContainer}>
+      <Text style={styles.door}>Door Delivery</Text>
+      <Text style={styles.expla}>Door delivery costs shs.10,000 for areas around Kampala and it it included on checkout</Text>
+      </View>
+      </View>
+      <View>
+      <Ionicons style={styles.icon} name="arrow-undo-circle-outline"  size={30}></Ionicons>
+      <View style={styles.doorContainer}>
+      <Text style={styles.door}>Return Policy</Text>
+      <Text style={styles.expla}>Incase of a return, contact customer support</Text>
+      </View>
+      </View>
+      <View>
+      <Ionicons style={styles.icon} name="card-outline"  size={30}></Ionicons>
+      <View style={styles.doorContainer}>
+      <Text style={styles.door}>Personal Pickup</Text>
+      <Text style={styles.expla}>You can arrange a personal pickup for your product by contacting customer support at time of checkout</Text>
+      </View>
       </View>
       <Snackbar
         visible={snackbarVisible}
@@ -165,7 +241,7 @@ const [isLoading, setIsLoading] = useState(true);
       >
         Product added to cart!
       </Snackbar>
-    </>
+    </ ScrollView>
  );
 };
 

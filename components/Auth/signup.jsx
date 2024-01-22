@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { ScrollView, Text, TextInput, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import axios from "axios"
+
 const Signup = () => {
   const navigation = useNavigation();
   const [username, setUsername] = useState('');
@@ -8,34 +10,22 @@ const Signup = () => {
   const [phonenumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+
   const handleSignup = async () => {
     try {
-      const response = await fetch('https://bala-canvas.onrender.com/customersignup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username,
-          address,
-          phonenumber,
-          email,
-          password,
-        }),
+      const response = await axios.post(process.env.EXPO_PUBLIC_SIGNUP_API_URL, {
+        username,
+        address,
+        phonenumber,
+        email,
+        password,
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        console.log('Signup successful:', data);
-        navigation.navigate('Login');
-      } else {
-        const errorData = await response.json();
-        console.error('Signup failed:', errorData);
-        Alert.alert('Signup Failed', errorData.message || 'Unknown error occurred');
-      }
+      Alert.alert('Signup Successful', 'You can now login with your credentials.');
     } catch (error) {
-      console.error('Error during signup:', error);
-      Alert.alert('Error while signing up', error.message || 'Unknown error occurred');
+      Alert.alert('Signup Failed', 'Please check your details and try again.');
+      console.error('Signup failed:', error.message);
     }
   };
   return (

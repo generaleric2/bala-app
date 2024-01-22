@@ -1,20 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { useSelector } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import SearchBar from "../../MicroComponents/searchbar"
 
 const Nav = () => {
   const navigation = useNavigation();
   const cart = useSelector((state) => state.cart);
   const totalQuantity = cart.items.reduce((acc, item) => acc + item.quantity, 0);
 
+
+
   return (
     <View style={styles.navbar}>
-            <Image
-        source={require('../../assets/logo.png')}
-        style={styles.logoImage}
-      />
+      <SearchBar/>
       <View style={styles.links}>
         <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
           <View style={styles.iconContainer}>
@@ -23,12 +23,10 @@ const Nav = () => {
                 <Text style={styles.badgeText}>{totalQuantity}</Text>
               </View>
             )}
-            <Ionicons style={styles.cart} name="ios-cart-outline" size={28} color="black" />
+            <Ionicons style={styles.cart} name="ios-cart" size={28} color="#008080" />
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Account')}>
-        <Ionicons name="person-outline" size={28} color="black" />
-        </TouchableOpacity>
+
       </View>
     </View>
   );
@@ -42,8 +40,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: 'white',
-    padding: 10,
+    padding: 5,
     zIndex: 1,
+    marginBottom: 20,
   },
   links: {
     flexDirection: 'row',

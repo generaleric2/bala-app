@@ -16,7 +16,11 @@
       "distribution": "internal",
         "env": {
           "EXPO_PUBLIC_SHOP_API_URL": "https://bala-canvas.onrender.com/shop",
-          "EXPO_PUBLIC_CART_API_URL": "https://bala-canvas.onrender.com/checkout"
+          "EXPO_PUBLIC_CART_API_URL": "https://bala-canvas.onrender.com/checkout",
+          "EXPO_PUBLIC_LOGIN_API_URL": "https://bala-canvas.onrender.com/customerlogin",
+          "EXPO_PUBLIC_LOGOUT_API_URL": "https://bala-canvas.onrender.com/logout",
+          "EXPO_PUBLIC_SIGNUP_API_URL": "https://bala-canvas.onrender.com/customersignup",
+          "EXPO_PUBLIC_ORDERS_API_URL": "https://bala-canvas.onrender.com/customers/${uid}/orders"
         }
     },
     "production": {}

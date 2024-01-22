@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
-import Nav from "../navbar/Navbar";
+import BottomBar from "../../MicroComponents/bottombar";
 
 const styles = StyleSheet.create({
   container: {
@@ -43,6 +43,8 @@ const styles = StyleSheet.create({
   },
 });
 
+
+
 const Shop = () => {
   const navigation = useNavigation();
   const [data, setData] = useState([]);
@@ -66,25 +68,31 @@ const Shop = () => {
 
   const renderProductItem = ({ item }) => (
     <TouchableOpacity style={styles.product} onPress={() => handleProductPress(item._id)}>
-      <Image source={{ uri: `https://bala-canvas.onrender.com/${item.productimage}` }} style={styles.productImage} />
+      <Image 
+        source={{ uri: `https://bala-canvas.onrender.com/${item.productimage}` }}
+        style={styles.productImage}
+      />
       <Text style={styles.productName}>{item.productname}</Text>
       <Text style={styles.productPrice}>UGX: {item.price}</Text>
     </TouchableOpacity>
   );
 
   return (
-    <>
-   <Nav /> 
-    <View style={styles.container}>
-    <Text style={styles.title}>Your Home Of Premium Shoes</Text>
-      <FlatList
-        data={data}
-        renderItem={renderProductItem}
-        keyExtractor={(item) => item._id}
-        numColumns={2} // Display 2 items per row
-        contentContainerStyle={{ paddingBottom: 16 }}
-      />
-    </View>
+    <> 
+      <View style={styles.container}>
+        <FlatList
+          data={data}
+          renderItem={renderProductItem}
+          keyExtractor={(item) => item._id}
+          numColumns={2}
+          contentContainerStyle={{ paddingBottom: 16 }}
+          // props for lazy loading
+          initialNumToRender={4} // Number of items to render in the initial batch
+          maxToRenderPerBatch={2} // Number of items to render per batch
+          windowSize={5} // Number of items in the initial batch to keep in the window
+        />
+      </View>
+      <BottomBar />
     </>
   );
 };
