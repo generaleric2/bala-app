@@ -1,20 +1,19 @@
-import React, {useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, Button, TextInput, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeFromCart, updateQuantity, clearCart } from '../reducers/cartSlice';
 import { ActivityIndicator } from 'react-native';
 import { Snackbar } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AuthContext from '../Auth/authSlice';
 import axios from 'axios';
 import { Ionicons } from '@expo/vector-icons';
 
 const Cart = () => {
-  const cart = useSelector((state) => state.cart);
-  const [snackbarVisible, setSnackbarVisible] = useState(false);
-  const dispatch = useDispatch();
-  const navigation = useNavigation();
-  const [isLoading, setIsLoading] = useState(false);
+ const cart = useSelector((state) => state.cart);
+ const [snackbarVisible, setSnackbarVisible] = useState(false);
+ const dispatch = useDispatch();
+ const [isLoading, setIsLoading] = useState(false);
+ const { authState } = useContext(AuthContext);
 
 
   const handleQuantity = (productId, newQuantity) => {
@@ -32,8 +31,8 @@ const Cart = () => {
       ? cart.items.reduce((acc, item) => acc + item.price * item.quantity, 0)
       : 0;
     const quantity = cart.items ? cart.items.reduce((acc, item) => acc + item.quantity, 0) : 0;
-    const uid = await AsyncStorage.getItem('uid'); // Change this to uid
-    const idToken = await AsyncStorage.getItem('idToken');
+    const uid = authState.uid;
+    const idToken = authState.idToken;
    
     try {
       if (!uid || !idToken) {
@@ -44,7 +43,7 @@ const Cart = () => {
         productName,
         totalPrice,
         quantity,
-        uid, // Use uid here
+        uid,
       });
    
       setIsLoading(false);

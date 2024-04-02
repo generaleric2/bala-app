@@ -1,34 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AuthContext from '../../components/Auth/authSlice'; // Adjust the import path as necessary
 import axios from 'axios';
-import Logout from '../../components/Auth/logout';
 
 const Account = () => {
-   const navigation = useNavigation();
-   const [isLoggedIn, setIsLoggedIn] = useState(false);
-   const [userId, setUserId] = useState(null);
-   const [customerDetails, setCustomerDetails] = useState(null);
-  
-   useEffect(() => {
-     checkLoginStatus();
-   }, []);
-  
-   const checkLoginStatus = async () => {
-     const uid = await AsyncStorage.getItem('uid');
-     setIsLoggedIn(!!uid);
-     setUserId(uid);
-   };
-  
-   useEffect(() => {
-     if (isLoggedIn && userId) {
-       axios.get(`https://bala-canvas.onrender.com/customers/${userId}`)
-         .then(response => setCustomerDetails(response.data))
-         .catch(error => console.error('Failed to fetch customer:', error));
-     }
-   }, [isLoggedIn, userId]);
+ const navigation = useNavigation();
+ const { authState } = useContext(AuthContext); // Use useContext directly
+ const [customerDetails, setCustomerDetails] = useState(null);
+
+ useEffect(() => {
+    if (authState.uid) {
+      axios.get(`https://bala-canvas.onrender.com/customers/${authState.uid}`)
+        .then(response => setCustomerDetails(response.data))
+        .catch(error => console.error('Failed to fetch customer:', error));
+    }
+ }, [authState.uid]);
+
+ // Define isLoggedIn and userId using useState
+ const [isLoggedIn, setIsLoggedIn] = useState(false);
+ const [userId, setUserId] = useState(null);
+
+ // Update isLoggedIn and userId based on authState
+ useEffect(() => {
+    setIsLoggedIn(!!authState.uid);
+    setUserId(authState.uid);
+ }, [authState.uid]);
   
  return (
     <View style={styles.container}>

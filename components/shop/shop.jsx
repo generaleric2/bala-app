@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState, useContext } from 'react';
+import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import BottomBar from "../../MicroComponents/bottombar";
+import Skeleton from "./skeleton"
 
 const styles = StyleSheet.create({
   container: {
@@ -41,19 +42,23 @@ const styles = StyleSheet.create({
     fontSize: 14,
     padding: 8,
   },
+  activityIndicator: {
+    margin: 16,
+  },
 });
-
-
 
 const Shop = () => {
   const navigation = useNavigation();
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const response = await axios.get(process.env.EXPO_PUBLIC_SHOP_API_URL);
         setData(response.data);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -77,19 +82,24 @@ const Shop = () => {
     </TouchableOpacity>
   );
 
+  const renderFooter = () =>
+  loading && <Skeleton />;;
+
+
+
   return (
-    <> 
+    <>
       <View style={styles.container}>
-        <FlatList
+      <FlatList
           data={data}
           renderItem={renderProductItem}
           keyExtractor={(item) => item._id}
           numColumns={2}
           contentContainerStyle={{ paddingBottom: 16 }}
-          // props for lazy loading
-          initialNumToRender={4} // Number of items to render in the initial batch
-          maxToRenderPerBatch={2} // Number of items to render per batch
-          windowSize={5} // Number of items in the initial batch to keep in the window
+          initialNumToRender={6}
+          maxToRenderPerBatch={2}
+          windowSize={5}
+          ListFooterComponent={renderFooter}
         />
       </View>
       <BottomBar />

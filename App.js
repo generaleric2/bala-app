@@ -1,4 +1,3 @@
-import React, {useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import 'react-native-gesture-handler';
@@ -19,9 +18,11 @@ import Cart from './components/cart/cart';
 import MenCategory from "./MicroComponents/Categories/mens"
 import WomenCategory from "./MicroComponents/Categories/women"
 import ChildrenCategory from "./MicroComponents/Categories/children"
-import SearchResults from "./components/navbar/search"
+import { SearchProvider } from "./components/navbar/search"
 import Momo from './MicroComponents/Payments/momo' 
 import ProductDetails from './components/Details/productDetails';
+import { AuthProvider } from './components/Auth/authSlice';
+import SearchResults from './components/navbar/search.jsx';
 
 
 
@@ -31,7 +32,9 @@ const App = () => {
 
 
  return (
+  <AuthProvider>
     <Provider store={store}>
+    <SearchProvider>
       <NavigationContainer>
       <Stack.Navigator>
           <Stack.Screen options={{
@@ -49,12 +52,14 @@ const App = () => {
           <Stack.Screen name="MenCategory" component={MenCategory} />
           <Stack.Screen name="WomenCategory" component={WomenCategory} />
           <Stack.Screen name="ChildrenCategory" component={ChildrenCategory} />
-          <Stack.Screen name="SearchResults" component={SearchResults} />
           <Stack.Screen name="Settings" component={Settings} />
           <Stack.Screen name="Orders" component={Orders} />
+          <Stack.Screen name="SearchResults" component={SearchResults} />
         </Stack.Navigator>
       </NavigationContainer>
+      </SearchProvider>
     </Provider>
+    </AuthProvider>
  );
 }
 const GestureHandlerRootViewGestureHandlerRootView = gestureHandlerRootHOC(App);

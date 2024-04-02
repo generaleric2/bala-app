@@ -3,7 +3,6 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { AntDesign, MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
 
 const BottomBar = () => {
